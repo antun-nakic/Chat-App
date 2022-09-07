@@ -23,7 +23,7 @@ const SendMessage = ({ scroll }) => {
   };
 
   return (
-    <div className="ml-80">
+    <div className="ml-[23rem]">
       <form onSubmit={sendMessage} className="h-14 w-full  flex text-xl ">
         <input
           value={input}

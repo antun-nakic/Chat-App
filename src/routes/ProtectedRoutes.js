@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import { useSelector } from "react-redux";
-import { selectUser } from "../context/features/userSlice";
+import { selectUser } from "../store/features/userSlice";
 import Sidebar from "../components/Sidebar";
 
 const ZasticeneRute = () => {

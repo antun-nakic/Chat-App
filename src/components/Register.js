@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 //firebase
 import {
   auth,
@@ -12,7 +12,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login, selectUser } from "../context/features/userSlice";
+import { login, selectUser } from "../store/features/userSlice";
 // utility npm
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
@@ -20,7 +20,7 @@ import { toast } from "react-toastify";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const errorFeedback = useRef(null);
   // user info
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -54,6 +54,7 @@ const Register = () => {
       name: name,
       uid,
       image: url,
+      isOnline: true,
     });
   };
 
@@ -62,7 +63,15 @@ const Register = () => {
 
   const uploadImage = (e) => {
     e.preventDefault();
+
     if (name === "" || password === "" || email === "") {
+      // set timeout to the message
+      errorFeedback.current.innerHTML = "Please fill in all the fields";
+      errorFeedback.current.style.display = "block";
+      setTimeout(() => {
+        errorFeedback.current.style.display = "none";
+      }, 5000);
+
       toast.warn("Please fill in all the fields");
       return;
     }
@@ -86,25 +95,24 @@ const Register = () => {
     }
   };
 
-  // POTEZI UNAZADSADASDASD
   // add user to db
   const handleRegister = (url) => {
     const idToast = toast.loading("Creating user...");
     createUserWithEmailAndPassword(auth, email, password)
       .then((userAuth) => {
-        toast.update(idToast, {
-          render: "User created successfully",
-          type: "success",
-          isLoading: false,
-          autoClose: 2000,
-          closeOnClick: true,
-          draggable: true,
-        });
-        saveUserInformation(url);
+        saveUserInformation(url, idToast);
         updateProfile(userAuth.user, {
           displayName: name,
           photoURL: url,
         }).then(
+          toast.update(idToast, {
+            render: "User created successfully",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000,
+            closeOnClick: true,
+            draggable: true,
+          }),
           dispatch(
             login({
               email: userAuth.user.email,
@@ -117,15 +125,23 @@ const Register = () => {
       })
       .catch((err) => {
         toast.dismiss(idToast);
-
+        errorFeedback.current.style.display = "block";
+        setTimeout(() => {
+          errorFeedback.current.style.display = "none";
+        }, 3000);
         if (err.code === "auth/invalid-email") {
           toast.error("Invalid email");
+          errorFeedback.current.innerHTML = "Invalid email";
         } else if (err.code === "auth/email-already-in-use") {
           toast.error("Email already in use");
+          errorFeedback.current.innerHTML = "Email already in use";
         } else if (err.code === "auth/internal-error") {
           toast.error("Please enter correct information");
+          errorFeedback.current.innerHTML = "Please enter correct information";
         } else if (err.code === "auth/weak-password") {
           toast.error("Password must be at least 6 characters");
+          errorFeedback.current.innerHTML =
+            "Password must be at least 6 characters";
         } else {
           toast.error(err.message);
         }
@@ -180,6 +196,10 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
+        {/* error */}
+        <span
+          className="mb-4 ml-1 text-left text-red-500"
+          ref={errorFeedback}></span>
         {/* Upload image */}
         <label className="w-full mb-8  flex flex-col items-center px-4 py-2 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-violet-800 cursor-pointer hover:bg-violet-800 hover:text-white">
           <div className="flex justify-center items-center gap-5">
@@ -200,6 +220,7 @@ const Register = () => {
             onChange={(e) => onImageChange(e.target.files[0])}
           />
         </label>
+
         {/* submit button */}
         <button
           className="bg-violet-800 hover:bg-violet-700 rounded-xl text-white py-2 w-full"

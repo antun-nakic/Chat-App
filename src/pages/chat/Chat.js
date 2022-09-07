@@ -39,7 +39,7 @@ const Chat = () => {
 
   return (
     <>
-      <div className="ml-80 h-[calc(100vh-8.5rem)]  overflow-auto">
+      <div className="ml-[23rem] h-[calc(100vh-8.5rem)] bg-hero-pattern bg-cover bg-no-repeat bg-center  overflow-auto">
         <main className="flex flex-col p-3 relative">
           {messages &&
             messages.map((message) => (

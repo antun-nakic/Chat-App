@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { selectUser } from "../context/features/userSlice";
+import { selectUser } from "../store/features/userSlice";
 
 const Homepage = () => {
   // console log user

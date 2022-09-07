@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectUser } from "../context/features/userSlice";
+import { selectUser } from "../store/features/userSlice";
 
 const InfoPage = () => {
   // console log user
   const { loading, user } = useSelector(selectUser);
   if (!loading) {
-    console.log(user)
+    console.log(user);
   }
 
   return (

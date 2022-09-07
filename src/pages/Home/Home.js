@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { auth, signInAnonymously, updateProfile } from "../../firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { login, selectUser } from "../../context/features/userSlice";
+import { login, selectUser } from "../../store/features/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -55,28 +55,46 @@ const Home = () => {
   };
   return (
     <>
-      <div className="min-h-screen bg-hero-pattern bg-cover bg-no-repeat flex items-center justify-center flex-col ">
-        <div>
-          <h1 className="text-4xl mb-20 text-white">
-            Chat application Algebra
+      <div className="min-h-screen  bg-hero-pattern bg-cover bg-no-repeat bg-center">
+        <div className="container  mx-auto px-5 md:px-10 2xl:px-0 ">
+          {/* LOGO */}
+          <h1 className="text-white  md:text-md 2xl:text-xl font-semibold h-10 pt-12">
+            TAMCHAT
           </h1>
-          <div className="flex flex-col gap-5">
-            <Link
-              className="bg-violet-800 text-white text-center hover:bg-violet-700 py-2 w-full block rounded-xl"
-              to="../login">
-              Login
-            </Link>
-            <Link
-              className="bg-violet-800 text-white text-center hover:bg-violet-700 py-2 w-full block rounded-xl"
-              to="../register">
-              Register
-            </Link>
-            <button
-              className="bg-violet-800 hover:bg-violet-700 rounded-xl text-white py-2 w-full"
-              type="submit"
-              onClick={handleGuestLogin}>
-              Login as guest
-            </button>
+          {/* HERO */}
+          <div className="h-full md:lg:h-[calc(100vh-5.5rem)] flex flex-col lg:flex-row  items-center justify-between ">
+            {/* LEFT SIDE */}
+            <div className="mt-20 lg:mt-0 h-full flex flex-col justify-center items-start mb-10">
+              <div className="flex flex-col lg:items-start items-center text-white mb-16">
+                <h1 className="text-center lg:text-left text-4xl md:leading-[1.4em] 2xl:text-[3.4rem] 2xl:leading-[5rem] l font- mb-6 ">
+                  The only chat app you {<br></br>}will ever need...
+                </h1>
+                <h4 className="max-w-xs xl:max-w-full text-center lg:text-left  font-extralight text-xl 2xl:text-3xl">
+                  Make an account and start chatting today!
+                </h4>
+              </div>
+              <div className="flex flex-col lg:mx-0 mx-auto w-[20em] lg:w-[27em] font-medium tracking-wide uppercase gap-5">
+                <div className="flex gap-5">
+                  <Link
+                    className="bg-primary-violet text-white text-center hover:bg-primary-hover py-2 w-full block rounded-xl"
+                    to="../login">
+                    Login
+                  </Link>
+                  <Link
+                    className="bg-primary-violet text-white text-center hover:bg-primary-hover py-2 w-full block rounded-xl"
+                    to="../register">
+                    Register
+                  </Link>
+                </div>
+                <button
+                  className="bg-secondary-violet font-medium tracking-wide uppercase gap-5 hover:bg-secondary-hover  rounded-xl text-white py-2 w-full"
+                  type="submit"
+                  onClick={handleGuestLogin}>
+                  Login as guest
+                </button>
+              </div>
+            </div>
+            <img className="contain" src="./assets/hero.png"></img>
           </div>
         </div>
       </div>

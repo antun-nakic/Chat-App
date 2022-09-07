@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 //firebase
 import { auth, signInWithEmailAndPassword } from "../firebase";
 // redux and react-router-dom
-import { login, selectUser } from "../context/features/userSlice";
+import { login, selectUser } from "../store/features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 // utility npm
