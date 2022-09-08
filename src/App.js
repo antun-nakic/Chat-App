@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { auth, onAuthStateChanged } from "./firebase";
 import { login, logout, selectUser } from "./store/features/userSlice";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
-import InfoPage from "./components/InfoPage";
-import Homepage from "./components/Homepage";
-import Home from "./pages/Home/Home";
+
 import Chat from "./pages/chat/Chat";
+import Home from "./pages/Home/Home";
+
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
@@ -47,11 +47,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/" element={<ProtectedRoutes />}>
-          <Route path="/homepage" element={<Homepage />} />
-          <Route path="/info" element={<InfoPage />} />
           <Route path="/chat" element={<Chat />} />
-          <Route path="/rooms" element={<Rooms />} />
-          <Route path="/rooms/:id" element={<DynamicPage />} />
+
+          <Route path="/chat/:id" element={<DynamicPage />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

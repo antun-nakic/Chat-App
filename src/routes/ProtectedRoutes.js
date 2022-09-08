@@ -1,8 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
-import Header from "../components/Header";
+
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/features/userSlice";
-import Sidebar from "../components/Sidebar";
+
+import Homepage from "../pages/chat/Chat";
 
 const ZasticeneRute = () => {
   const { loading, user } = useSelector(selectUser);
@@ -13,8 +14,7 @@ const ZasticeneRute = () => {
       <Navigate to="/login" replace />
     ) : (
       <>
-        {/* <Sidebar />
-        <Header /> */}
+        {/* <Homepage /> */}
         <Outlet />
       </>
     ))

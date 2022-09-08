@@ -3,6 +3,9 @@ import {
   getDocs,
   addDoc,
   serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
 } from "firebase/firestore";
 import { auth, db } from "./../firebase";
 import { useState, useEffect } from "react";
@@ -12,11 +15,14 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { uuidv4 } from "@firebase/util";
 import { Link } from "react-router-dom";
+import Avatar from "react-avatar";
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
   const [roomName, setRoomName] = useState("");
-  const [roomImage, setRoomImage] = useState("www.http://placehold.it/200x200");
+  const [roomImage, setRoomImage] = useState("");
+
+  console.log(rooms);
 
   const { user } = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -27,10 +33,7 @@ const Rooms = () => {
       toast.warn("Please enter a room name");
       return;
     }
-    if (roomImage === "") {
-      toast.warn("Please enter a room image");
-      return;
-    }
+
     const { uid } = auth.currentUser;
     await addDoc(collection(db, "rooms"), {
       name: roomName,
@@ -38,39 +41,51 @@ const Rooms = () => {
       uid,
       timestamp: serverTimestamp(),
     });
-    setRoomName("");
-    setRoomImage("");
-  };
-
-  const getRooms = async () => {
-    const querySnapshot = await getDocs(collection(db, "rooms"));
-    querySnapshot.forEach((doc) => {
-      setRooms((prev) => [...prev, doc.data()]);
-    });
+    setRooms([...rooms, { name: roomName, image: roomImage, uid }]);
   };
 
   useEffect(() => {
-    getRooms();
+    const q = query(collection(db, "rooms"), orderBy("timestamp"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      let rooms = [];
+      querySnapshot.forEach((doc) => {
+        rooms.push(doc.data());
+      });
+      setRooms(rooms);
+    });
+    return unsubscribe;
   }, []);
 
   return (
-    <div className="ml-[30rem] mt-80">
+    <div className="max-h-[calc(100vh-6.1rem)]   overflow-y-auto overflow-x-hidden">
       <form className="text-black" onSubmit={addRoom}>
         <input
+          className="bg-transparent border-b border-white border-opacity-30 p-3 text-white w-full focus:outline-none"
           type="text"
+          placeholder="room name..."
           value={roomName}
           onChange={(e) => setRoomName(e.target.value)}
         />
-        <button className="bg-white">Add Room</button>
+        <button className="w-full bg-secondary-violet py-2 border-b border-white border-opacity-30 border-y text-white hover:bg-secondary-hover">
+          Add Room
+        </button>
       </form>
 
       {/* display all rooms */}
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2 mt-5 ">
         {rooms.map((room) => (
-          <li className="text-white" key={uuidv4()}>
-            <Link to={`/rooms/${room.name}`}>
-              <img src={room.image} alt="" />
-              <h1>{room.name}</h1>
+          <li className="text-white   list-none" key={uuidv4()}>
+            <Link
+              className="flex justify-center  gap-1 overflow-hidden items-center p-3 hover:bg-gray-700"
+              to={`/chat/${room.name}`}>
+              <Avatar
+                src={room.image}
+                size={40}
+                round="5%"
+                maxInitials={2}
+                name={room.name}
+                textSizeRatio={1.5}
+              />
             </Link>
           </li>
         ))}

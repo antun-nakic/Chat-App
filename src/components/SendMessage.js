@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "./../firebase";
+import { MdSend } from "react-icons/md";
 
 const SendMessage = ({ scroll }) => {
   const [input, setInput] = useState("");
@@ -23,16 +24,18 @@ const SendMessage = ({ scroll }) => {
   };
 
   return (
-    <div className="ml-[23rem]">
-      <form onSubmit={sendMessage} className="h-14 w-full  flex text-xl ">
+    <div className="mt-auto pt-6 z-20 bg-hero-pattern bg-cover bg-bottom fixed bottom-0 w-[65%] 2xl:w-[65.7%] pb-7 px-20">
+      <form onSubmit={sendMessage} className=" w-full  flex text-xl ">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          className="w-full text-xl p-3 bg-gray-900 text-white outline-none border-none"
+          className="w-full text-base p-3 bg-transparent text-white border rounded-2xl border-white border-opacity-30 h-14 placeholder-white placeholder-opacity-40 font-light focus:outline-none"
           type="text"
-          placeholder="Message"
+          placeholder="Write a message..."
         />
-        <button className="w-[20%] bg-green-500">Send</button>
+        <button className="w-[10%] ">
+          <MdSend className="text-4xl hover:text-primary-hover text-primary-violet w-full" />
+        </button>
       </form>
     </div>
   );
