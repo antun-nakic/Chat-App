@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 // utility npm
 import { toast } from "react-toastify";
+import { FaSignInAlt } from "react-icons/fa";
 
 function Login() {
   const dispatch = useDispatch();
@@ -71,48 +72,65 @@ function Login() {
   };
 
   return (
-    <div className="bg-hero-pattern bg-cover min-h-screen flex flex-col justify-center items-center">
+    <div className="min-h-screen flex flex-col justify-center items-center">
       {/* LOGIN FORM */}
-      <form onSubmit={loginToApp} className="flex flex-col">
-        {/* email */}
-        <label className="text-white text-lg font-bold mb-2" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="bg-white rounded-full px-4 mb-4"
-          placeholder="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+      <div className=" shadow-2xl min-w-[25em]">
+        <div className="bg-gradient-to-r from-[#252e47] to-[#1c1c32] py-3 rounded-t-3xl w-full opacity-60 ">
+          <h4 className="text-white  tracking-wide font-semibold text-center">
+            #LOGIN
+          </h4>
+        </div>
+        <div className="bg-[#141223] p-10 w-full rounded-b-3xl">
+          {/* FORM */}
+          <form onSubmit={loginToApp} className="flex flex-col">
+            {/* email */}
+            <label
+              className="text-white text-md font-light pl-4 mb-2"
+              htmlFor="email">
+              Email
+            </label>
+            <input
+              className="bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-2 mb-4 outline-none "
+              placeholder="john.doe@gmail.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
 
-        {/* password */}
-        <label className="text-white text-lg font-bold mb-2" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="bg-white rounded-full px-4 mb-4"
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+            {/* password */}
+            <label
+              className="text-white text-md  font-light pl-4 mb-2"
+              htmlFor="password">
+              Password
+            </label>
+            <input
+              className="bg-[#2D2A46] placeholder:opacity-50  text-white rounded-full px-4 py-2 mb-4 outline-none"
+              placeholder="********"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
 
-        {/* submit button */}
-        <button
-          className="bg-violet-800 hover:bg-violet-700 rounded-xl text-white py-2 w-full"
-          type="submit"
-          onClick={loginToApp}>
-          Login
-        </button>
-      </form>
+            {/* submit button */}
+            <button
+              className="bg-primary-violet transition duration-300 hover:bg-primary-hover rounded-full text-white py-2 w-full mt-4 font-semibold tracking-widest flex justify-center items-center gap-2"
+              type="submit"
+              onClick={loginToApp}>
+              LOGIN
+              <FaSignInAlt />
+            </button>
+          </form>
 
-      {/* REGISTER LINK */}
-      <div>
-        <span className="text-white">Not a member? </span>
-        <Link className="text-violet-400 hover:text-violet-200" to="/register">
-          register here
-        </Link>
+          {/* REGISTER LINK */}
+          <div className="text-center mt-10">
+            <span className="text-white ">Not a member? </span>
+            <Link
+              className="pl-2 text-primary-hover transition duration-300 hover:text-primary-violet "
+              to="/register">
+              register here
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ import { login, selectUser } from "../store/features/userSlice";
 // utility npm
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
+import { FaUserPlus } from "react-icons/fa";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -28,9 +29,7 @@ const Register = () => {
 
   // user image
   const [image, setimage] = useState("");
-  const [previewImage, setpreviewImage] = useState(
-    "https://i.imgur.com/6VBx3io.png"
-  );
+  const [previewImage, setpreviewImage] = useState("./assets/guestProfile.jpg");
   const onImageChange = (img) => {
     setimage(img);
     setpreviewImage(URL.createObjectURL(img));
@@ -45,7 +44,7 @@ const Register = () => {
   }, [user, navigate]);
 
   // add user data
-  const saveUserInformation = async (url) => {
+  const saveUserInformationToDB = async (url) => {
     const { uid } = auth.currentUser;
     if (url === null || url === undefined) {
       url = "";
@@ -61,7 +60,7 @@ const Register = () => {
   // upload image & get url
   const metadata = { contentType: "image/jpeg " };
 
-  const uploadImage = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     if (name === "" || password === "" || email === "") {
@@ -75,6 +74,19 @@ const Register = () => {
       toast.warn("Please fill in all the fields");
       return;
     }
+
+    if (name.length < 3 || name.length > 14) {
+      errorFeedback.current.innerHTML =
+        "Username must be between 3 and 14 characters";
+      errorFeedback.current.style.display = "block";
+      setTimeout(() => {
+        errorFeedback.current.style.display = "none";
+      }, 5000);
+      toast.warn("Username must be between 3 and 14 characters");
+      return;
+    }
+
+    const idToast = toast.loading("Creating user...");
     if (image) {
       const storageRef = ref(storage, `userimages/${uuidv4()}`);
       const uploadTask = uploadBytesResumable(storageRef, image, metadata);
@@ -86,21 +98,20 @@ const Register = () => {
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((URL) => {
-            handleRegister(URL);
+            handleRegister(idToast, URL);
           });
         }
       );
     } else {
-      handleRegister();
+      handleRegister(idToast);
     }
   };
 
   // add user to db
-  const handleRegister = (url) => {
-    const idToast = toast.loading("Creating user...");
+  const handleRegister = (idToast, url) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userAuth) => {
-        saveUserInformation(url, idToast);
+        saveUserInformationToDB(url, idToast);
         updateProfile(userAuth.user, {
           displayName: name,
           photoURL: url,
@@ -149,94 +160,116 @@ const Register = () => {
   };
 
   return (
-    <div className="bg-hero-pattern bg-cover min-h-screen flex flex-col justify-center items-center">
-      <img
-        src={previewImage}
-        alt="Avatar"
-        className="h-40 w-40 rounded-full mb-5"
-      />
-
-      {/* REGISTER FORM */}
-      <form onSubmit={uploadImage} className="flex flex-col">
-        {/* name */}
-        <label className="text-white text-lg font-bold mb-2" htmlFor="email">
-          Enter username
-        </label>
-        <input
-          className="bg-white rounded-full px-4 mb-4"
-          placeholder="Full name (required for registering)"
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-
-        {/* email */}
-        <label className="text-white text-lg font-bold mb-2" htmlFor="email">
-          Email
-        </label>
-        <input
-          className="bg-white rounded-full px-4 mb-4"
-          placeholder="Email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-
-        {/* password */}
-        <label className="text-white text-lg font-bold mb-2" htmlFor="password">
-          Password
-        </label>
-        <input
-          className="bg-white rounded-full px-4 mb-4"
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {/* error */}
-        <span
-          className="mb-4 ml-1 text-left text-red-500"
-          ref={errorFeedback}></span>
-        {/* Upload image */}
-        <label className="w-full mb-8  flex flex-col items-center px-4 py-2 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-violet-800 cursor-pointer hover:bg-violet-800 hover:text-white">
-          <div className="flex justify-center items-center gap-5">
-            <svg
-              className="w-7 h-7"
-              fill="currentColor"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20">
-              <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
-            </svg>
-            <span className=" text-base leading-normal">
-              Upload profile image
-            </span>
+    <div className="min-h-screen  flex flex-col justify-center items-center scroll ">
+      <div className=" shadow-2xl min-w-[27em]">
+        <div className="bg-gradient-to-r from-[#252e47] to-[#1c1c32] py-3 rounded-t-3xl w-full opacity-60 ">
+          <h4 className="text-white  tracking-wide font-semibold text-center">
+            #REGISTER
+          </h4>
+        </div>
+        <div className="bg-[#141223]  px-10 pt-7 pb-6 w-full rounded-b-3xl">
+          <div className="flex justify-center items-center  ">
+            <img
+              src={previewImage}
+              alt="Avatar"
+              className="h-16 w-16 rounded-full hidden md:block "
+            />
           </div>
-          <input
-            type="file"
-            className="hidden"
-            onChange={(e) => onImageChange(e.target.files[0])}
-          />
-        </label>
+          {/* REGISTER FORM */}
+          <form onSubmit={handleSubmit} className="flex flex-col">
+            {/* name */}
+            <label
+              className="text-white text-md font-light pl-4 mb-2"
+              htmlFor="username">
+              Username
+            </label>
+            <input
+              title="Must be between 3-14 characters"
+              className="bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none "
+              placeholder="john doe"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
 
-        {/* submit button */}
-        <button
-          className="bg-violet-800 hover:bg-violet-700 rounded-xl text-white py-2 w-full"
-          type="submit"
-          onClick={uploadImage}>
-          register
-        </button>
-      </form>
+            {/* email */}
+            <label
+              className="text-white text-md font-light pl-4 mb-2"
+              htmlFor="email">
+              Email
+            </label>
+            <input
+              title="Must be a valid email"
+              className="bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none "
+              placeholder="john.doe@gmail.com"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required></input>
 
-      {/* LOGIN LINK */}
-      <div>
-        <span className="text-white">Already a member? </span>
-        <Link className="text-violet-400 hover:text-violet-200" to="/login">
-          {" "}
-          Go back to Login
-        </Link>
+            {/* password */}
+            <label
+              className="text-white text-md  font-light pl-4 mb-2"
+              htmlFor="password">
+              Password
+            </label>
+            <input
+              title="Must have at least 6 characters"
+              className="bg-[#2D2A46] placeholder:opacity-50  text-white rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none"
+              placeholder="Must have at least 6 characters"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+
+            {/* error */}
+            <div
+              className="mb-2 ml-1  text-left text-red-500"
+              ref={errorFeedback}></div>
+            {/* Upload image */}
+            <label className="w-full mb-4 mt-3  transition duration-300 flex-col items-center px-4 py-2 bg-[#2D2A46] text-white rounded-full shadow-lg tracking-wide uppercase cursor-pointer hover:bg-primary-hover hover:text-white hidden md:flex">
+              <div className="flex justify-center items-center gap-5">
+                <svg
+                  className="w-7 h-7"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20">
+                  <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                </svg>
+                <span className=" text-base leading-normal">
+                  Upload profile image
+                </span>
+              </div>
+              <input
+                type="file"
+                className="hidden"
+                onChange={(e) => onImageChange(e.target.files[0])}
+              />
+            </label>
+
+            {/* submit button */}
+            <button
+              className="bg-primary-violet transition duration-300  hover:bg-primary-hover rounded-full text-white py-2 w-full mt-4 font-semibold tracking-widest flex justify-center items-center gap-2"
+              type="submit"
+              onClick={handleSubmit}>
+              REGISTER
+              <FaUserPlus />
+            </button>
+          </form>
+
+          {/* LOGIN LINK */}
+          <div className="text-center mt-5">
+            <span className="text-white">Already a member? </span>
+            <Link
+              className="pl-2 text-primary-hover transition duration-300 hover:text-primary-violet"
+              to="/login">
+              {" "}
+              Go to Login
+            </Link>
+          </div>
+        </div>
       </div>
     </div>
   );

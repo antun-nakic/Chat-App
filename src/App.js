@@ -12,6 +12,8 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Rooms from "./components/Rooms";
+import DynamicPage from "./routes/DynamicPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,13 +43,15 @@ function App() {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className="bg-hero-pattern bg-cover min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/" element={<ProtectedRoutes />}>
           <Route path="/homepage" element={<Homepage />} />
           <Route path="/info" element={<InfoPage />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/rooms" element={<Rooms />} />
+          <Route path="/rooms/:id" element={<DynamicPage />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

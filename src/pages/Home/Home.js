@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, selectUser } from "../../store/features/userSlice";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { FaUserPlus, FaSignInAlt, FaUserCircle } from "react-icons/fa";
 
 const Home = () => {
   const [userRegistered, setUserRegistered] = useState(false);
@@ -27,7 +28,7 @@ const Home = () => {
         setUserRegistered(true);
         toast.update(idToast, {
           render:
-            "You are now logged in. Create an account if you enjoy the app.",
+            "You are now logged in as guest. Please create an account to use all app features.",
           type: "success",
           isLoading: false,
           autoClose: 5000,
@@ -36,15 +37,14 @@ const Home = () => {
         });
         updateProfile(userAuth.user, {
           displayName: "Guest" + Math.floor(Math.random() * 1000),
-          photoUrl: "https://i.imgur.com/6uGxYQq.png",
+          photoUrl: "./images/guestProfile.jpg",
         });
-        // Dispatch the user information for persistence in the redux state
+
         dispatch(
           login({
             uid: userAuth.user.uid,
             displayName: "Guest" + Math.floor(Math.random() * 1000),
-            // photoUrl: guest photo
-            photoUrl: "https://i.imgur.com/6VBx3io.png",
+            photoUrl: "./images/guestProfile.jpg",
           })
         );
       })
@@ -55,49 +55,51 @@ const Home = () => {
   };
   return (
     <>
-      <div className="min-h-screen  bg-hero-pattern bg-cover bg-no-repeat bg-center">
-        <div className="container  mx-auto px-5 md:px-10 2xl:px-0 ">
-          {/* LOGO */}
-          <h1 className="text-white  md:text-md 2xl:text-xl font-semibold h-10 pt-12">
-            TAMCHAT
+      <header className="container flex justify-start items-center">
+        <h1 className="text-white pt-8 text-xl font-semibold ">ChatTam.</h1>
+      </header>
+      {/* hero */}
+      <main className="mt-10 2xl:mt-24 lg:mt-7 justify-between container flex flex-col md:flex-row items-center">
+        {/* left side */}
+        <section className="w-full md:w-1/2 ">
+          <h1 className=" max-w-full lg:max-w-md 2xl:max-w-full text-3xl lg:text-4xl 2xl:text-[3rem] font-semibold text-center md:text-left text-white leading-[3rem] 2xl:leading-[4.5rem] lg:leading-[3.5rem] mb-5">
+            The only chat app you will ever need...
           </h1>
-          {/* HERO */}
-          <div className="h-full md:lg:h-[calc(100vh-5.5rem)] flex flex-col lg:flex-row  items-center justify-between ">
-            {/* LEFT SIDE */}
-            <div className="mt-20 lg:mt-0 h-full flex flex-col justify-center items-start mb-10">
-              <div className="flex flex-col lg:items-start items-center text-white mb-16">
-                <h1 className="text-center lg:text-left text-4xl md:leading-[1.4em] 2xl:text-[3.4rem] 2xl:leading-[5rem] l font- mb-6 ">
-                  The only chat app you {<br></br>}will ever need...
-                </h1>
-                <h4 className="max-w-xs xl:max-w-full text-center lg:text-left  font-extralight text-xl 2xl:text-3xl">
-                  Make an account and start chatting today!
-                </h4>
-              </div>
-              <div className="flex flex-col lg:mx-0 mx-auto w-[20em] lg:w-[27em] font-medium tracking-wide uppercase gap-5">
-                <div className="flex gap-5">
-                  <Link
-                    className="bg-primary-violet text-white text-center hover:bg-primary-hover py-2 w-full block rounded-xl"
-                    to="../login">
-                    Login
-                  </Link>
-                  <Link
-                    className="bg-primary-violet text-white text-center hover:bg-primary-hover py-2 w-full block rounded-xl"
-                    to="../register">
-                    Register
-                  </Link>
-                </div>
-                <button
-                  className="bg-secondary-violet font-medium tracking-wide uppercase gap-5 hover:bg-secondary-hover  rounded-xl text-white py-2 w-full"
-                  type="submit"
-                  onClick={handleGuestLogin}>
-                  Login as guest
-                </button>
-              </div>
+          <p className="text-center md:text-left font-extralight text-xl 2xl:text-3xl lg:text-xl text-white">
+            Make an account and start chatting today!
+          </p>
+          <div className="mt-10 2xl:max-w-xl lg:max-w-[22em]">
+            <div className="flex gap-7 2xl:mb-7 mb-5">
+              <Link
+                className="bg-primary-violet flex justify-center items-center gap-2 text-white text-center hover:bg-primary-hover py-2 w-full  rounded-xl transition duration-300"
+                to="../login">
+                Login <FaSignInAlt />
+              </Link>
+              <Link
+                className="bg-primary-violet flex justify-center items-center gap-2 text-white text-center hover:bg-primary-hover py-2 w-full rounded-xl transition duration-300 "
+                to="../register">
+                Register
+                <FaUserPlus />
+              </Link>
             </div>
-            <img className="contain" src="./assets/hero.png"></img>
+            <button
+              className="bg-secondary-violet flex justify-center items-center font-medium tracking-wide uppercase gap-2 hover:bg-secondary-hover transition duration-300  rounded-xl text-white py-2 w-full"
+              type="submit"
+              onClick={handleGuestLogin}>
+              Login as guest
+              <FaUserCircle />
+            </button>
           </div>
-        </div>
-      </div>
+        </section>
+        {/* right side */}
+        <section className="mt-20 md:mt-0">
+          <img
+            className="object-cover"
+            src="./assets/hero.png"
+            alt="chat screen"
+          />
+        </section>
+      </main>
     </>
   );
 };

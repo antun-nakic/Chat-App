@@ -13,8 +13,8 @@ const ZasticeneRute = () => {
       <Navigate to="/login" replace />
     ) : (
       <>
-        <Sidebar />
-        <Header />
+        {/* <Sidebar />
+        <Header /> */}
         <Outlet />
       </>
     ))
