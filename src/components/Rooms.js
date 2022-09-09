@@ -11,7 +11,6 @@ import { auth, db } from "./../firebase";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../store/features/userSlice";
-import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { uuidv4 } from "@firebase/util";
 import { Link } from "react-router-dom";
@@ -22,10 +21,7 @@ const Rooms = () => {
   const [roomName, setRoomName] = useState("");
   const [roomImage, setRoomImage] = useState("");
 
-  console.log(rooms);
-
   const { user } = useSelector(selectUser);
-  const dispatch = useDispatch();
 
   const addRoom = async (e) => {
     e.preventDefault();
