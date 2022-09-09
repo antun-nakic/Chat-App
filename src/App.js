@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { auth, onAuthStateChanged } from "./firebase";
 import { login, logout, selectUser } from "./store/features/userSlice";
@@ -15,9 +15,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Rooms from "./components/Rooms";
 import DynamicPage from "./routes/DynamicPage";
 
+import { AnimatePresence } from "framer-motion";
+
 function App() {
   const dispatch = useDispatch();
-
+  const location = useLocation();
   // console log user
   const { loading, user } = useSelector(selectUser);
   if (!loading) {
@@ -44,28 +46,30 @@ function App() {
 
   return (
     <div className="bg-hero-pattern bg-cover min-h-screen">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/" element={<ProtectedRoutes />}>
-          <Route path="/chat" element={<Chat />} />
+      <AnimatePresence exitBeforeEnter>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Home />} />
+          <Route path="/" element={<ProtectedRoutes />}>
+            <Route path="/chat" element={<Chat />} />
 
-          <Route path="/chat/:id" element={<DynamicPage />} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-      <ToastContainer
-        position="top-center"
-        theme="dark"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss={false}
-        draggable
-        pauseOnHover
-      />
+            <Route path="/chat/:id" element={<DynamicPage />} />
+          </Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+        <ToastContainer
+          position="top-center"
+          theme="dark"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss={false}
+          draggable
+          pauseOnHover
+        />
+      </AnimatePresence>
     </div>
   );
 }

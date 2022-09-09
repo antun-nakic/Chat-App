@@ -16,6 +16,7 @@ import { selectUser } from "../../store/features/userSlice";
 import { useSelector } from "react-redux";
 import Rooms from "../../components/Rooms";
 import DynamicPage from "../../routes/DynamicPage";
+import { motion } from "framer-motion";
 
 const Homepage = () => {
   const [image, setImage] = useState([""]);
@@ -25,7 +26,8 @@ const Homepage = () => {
   const [userList, setUserList] = useState([]);
   const [search, setSearch] = useState("");
   // new stuff
-
+  const [isOpen, setIsOpen] = useState(false);
+  console.log(isOpen);
   // get all users from firestore database
   const getAllUsers = async () => {
     const querySnapshot = await getDocs(collection(db, "userInfo"));
@@ -95,7 +97,16 @@ const Homepage = () => {
 
   return (
     <>
-      <div className="flex min-h-screen ">
+      <motion.div
+        initial={{
+          opacity: 0,
+        }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.5 }}
+        duration={0.2}
+        ease="easeInOut"
+        className="flex min-h-screen ">
         <section className=" w-1/2">
           {/* profile info */}
           <div className="text-white bg-gradient-to-r from-[#1c2232] to-[#18182a] flex justify-center border-opacity-30 items-center p-6 gap-7 border-b border-r  border-white ">
@@ -127,7 +138,9 @@ const Homepage = () => {
               <Rooms />
             </div>
             {/* user list */}
-            <div className="min-h-[calc(100vh-6.1rem)] bg-gradient-to-b from-[#121021] to-[#1c1a31] border-x border-white border-opacity-30  w-full">
+            <div
+              className="h-[calc(100vh-6.1rem)] 
+            bg-gradient-to-b from-[#121021] to-[#1c1a31] border-x border-white border-opacity-30  w-full overflow-y-auto">
               <div className="mb-5  ">
                 <form onSubmit={handleSearchUsers} className="flex  w-full">
                   <input
@@ -151,7 +164,7 @@ const Homepage = () => {
                     onClick={handleSelectUser}
                     key={user.uid}
                     id={user.uid}
-                    className="flex text-white items-center space-x-3 mb-2 hover:bg-primary-violet cursor-pointer p-2  transition duration-200">
+                    className="flex text-white items-center space-x-3 mb-2 hover:bg-primary-violet cursor-pointer p-2  transition duration-200 ">
                     <Avatar
                       src={user.image}
                       name={user.name}
@@ -179,7 +192,7 @@ const Homepage = () => {
         <section className="bg-hero-pattern bg-cover w-full min-h-screen ">
           <DynamicPage messages={messages} scroll={scroll} image={image} />
         </section>
-      </div>
+      </motion.div>
     </>
   );
 };

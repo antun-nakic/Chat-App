@@ -8,6 +8,7 @@ import { useNavigate, Link } from "react-router-dom";
 // utility npm
 import { toast } from "react-toastify";
 import { FaSignInAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 function Login() {
   const dispatch = useDispatch();
@@ -35,16 +36,16 @@ function Login() {
     const idToast = toast.loading("Logging in...");
     signInWithEmailAndPassword(auth, email, password)
       .then((userAuth) => {
-        if (toast) {
-          toast.update(idToast, {
-            render: "You are now logged in.",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-            closeOnClick: true,
-            draggable: true,
-          });
-        }
+        // if (toast) {
+        //   toast.update(idToast, {
+        //     render: "You are now logged in.",
+        //     type: "success",
+        //     isLoading: false,
+        //     autoClose: 2000,
+        //     closeOnClick: true,
+        //     draggable: true,
+        //   });
+        // }
 
         dispatch(
           login({
@@ -72,9 +73,26 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center">
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.5 }}
+      duration={0.2}
+      ease="easeInOut"
+      className="min-h-screen flex flex-col justify-center items-center overflow-hidden">
       {/* LOGIN FORM */}
-      <div className=" shadow-2xl min-w-[25em]">
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: 100,
+        }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -100 }}
+        transition={{ duration: 0.5 }}
+        className=" shadow-2xl min-w-[25em] ">
         <div className="bg-gradient-to-r from-[#252e47] to-[#1c1c32] py-3 rounded-t-3xl w-full opacity-60 ">
           <h4 className="text-white  tracking-wide font-semibold text-center">
             #LOGIN
@@ -125,14 +143,22 @@ function Login() {
           <div className="text-center mt-10">
             <span className="text-white ">Not a member? </span>
             <Link
-              className="pl-2 text-primary-hover transition duration-300 hover:text-primary-violet "
+              className="pl-1 text-primary-hover transition duration-300 hover:text-primary-violet "
               to="/register">
               register here
             </Link>
           </div>
+          <div className="text-center mt-1">
+            <span className="text-white ">Back to </span>
+            <Link
+              className="pl-1 text-primary-hover transition duration-300 hover:text-primary-violet"
+              to="/">
+              Homepage
+            </Link>
+          </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

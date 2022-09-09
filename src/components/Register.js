@@ -17,6 +17,7 @@ import { login, selectUser } from "../store/features/userSlice";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 import { FaUserPlus } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -160,8 +161,24 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen  flex flex-col justify-center items-center scroll ">
-      <div className=" shadow-2xl min-w-[27em]">
+    <motion.div
+      initial={{
+        opacity: 0,
+      }}
+      animate={{ opacity: 1 }}
+      duration={0.2}
+      exit={{ opacity: 0 }}
+      transition={{ type: "tween", duration: 0.8 }}
+      className="min-h-screen  flex flex-col justify-center items-center scroll overflow-hidden">
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: 100,
+        }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -100 }}
+        transition={{ duration: 0.5 }}
+        className=" shadow-2xl min-w-[27em]">
         <div className="bg-gradient-to-r from-[#252e47] to-[#1c1c32] py-3 rounded-t-3xl w-full opacity-60 ">
           <h4 className="text-white  tracking-wide font-semibold text-center">
             #REGISTER
@@ -269,9 +286,17 @@ const Register = () => {
               Go to Login
             </Link>
           </div>
+          <div className="text-center mt-1">
+            <span className="text-white ">Back to </span>
+            <Link
+              className="pl-1 text-primary-hover transition duration-300 hover:text-primary-violet"
+              to="/">
+              Homepage
+            </Link>
+          </div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
