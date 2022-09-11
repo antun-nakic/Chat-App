@@ -31,14 +31,14 @@ const Modal = ({ user, setOpenModal }) => {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="w-[calc(100vw-2em)] h-[calc(100vh-15em)]  md:w-[35em] md:h-[18em] bg-gradient-to-r from-[#252e47] to-[#1c1c32] shadow-2xl  text-white  absolute left-0 right-0 top-0 bottom-0 my-auto mx-auto text-center z-50 rounded-3xl">
+        className="w-[calc(100vw-2em)] h-[calc(100vh-15em)]  md:w-[35em] md:h-[18em] bg-gradient-to-r from-[#252e47] to-[#1c1c32] shadow-2xl  text-white  absolute left-0 right-0 top-0 bottom-0 my-auto mx-auto text-center z-50 rounded-3xl x">
         <IoClose
           className="cursor-pointer text-2xl absolute right-10 top-5"
           onClick={() => setOpenModal(false)}
         />
         <div className="justify-center items-center  flex md:flex-row flex-col gap-10 h-full  ">
           <Avatar src={user.image} name={user.name} size="150" />
-          <div className="text-left break-words  ">
+          <div className="text-center md:text-left break-words  ">
             <p className="text-3xl font-bold break-words max-w-xs ">
               {user.name}
             </p>

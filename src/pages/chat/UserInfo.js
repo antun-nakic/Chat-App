@@ -23,7 +23,9 @@ const UserInfo = ({ user, handleClickUser }) => {
       </div>
       <div>
         <p className="font-semibold ">{user.displayName}</p>
-        <p className="font-light">#{user.uid.replace(/[^0-9]/g, "")}</p>
+        <p className="font-light text-center">
+          #{user.uid.replace(/[^0-9]/g, "")}
+        </p>
       </div>
 
       <button
