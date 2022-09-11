@@ -39,6 +39,7 @@ const Register = () => {
 
   // redirect to chat if user logged in
   const { user } = useSelector(selectUser);
+
   useEffect(() => {
     if (user !== null) {
       navigate(`/chat`);
@@ -116,7 +117,7 @@ const Register = () => {
         saveUserInformationToDB(url, idToast);
         updateProfile(userAuth.user, {
           displayName: name,
-          photoURL: url,
+          photoUrl: url,
         }).then(
           // toast.update(idToast, {
           //   render: "User created successfully",
@@ -131,7 +132,7 @@ const Register = () => {
               email: userAuth.user.email,
               uid: userAuth.user.uid,
               displayName: name,
-              photoURL: url,
+              photoUrl: url,
             })
           )
         );
@@ -170,7 +171,7 @@ const Register = () => {
       duration={0.2}
       exit={{ opacity: 0 }}
       transition={{ type: "tween", duration: 0.8 }}
-      className="min-h-screen  flex flex-col justify-center items-center scroll overflow-hidden">
+      className='min-h-screen  flex flex-col justify-center items-center scroll overflow-hidden'>
       <motion.div
         initial={{
           opacity: 0,
@@ -179,33 +180,33 @@ const Register = () => {
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -100 }}
         transition={{ duration: 0.5 }}
-        className=" shadow-2xl min-w-[27em]">
-        <div className="bg-gradient-to-r from-[#252e47] to-[#1c1c32] py-3 rounded-t-3xl w-full opacity-60 ">
-          <h4 className="text-white  tracking-wide font-semibold text-center">
+        className=' shadow-2xl min-w-[27em]'>
+        <div className='bg-gradient-to-r from-[#252e47] to-[#1c1c32] py-3 rounded-t-3xl w-full opacity-60 '>
+          <h4 className='text-white  tracking-wide font-semibold text-center'>
             #REGISTER
           </h4>
         </div>
-        <div className="bg-[#141223]  px-10 pt-7 pb-6 w-full rounded-b-3xl">
-          <div className="flex justify-center items-center  ">
+        <div className='bg-[#141223]  px-10 pt-7 pb-6 w-full rounded-b-3xl'>
+          <div className='flex justify-center items-center  '>
             <img
               src={previewImage}
-              alt="Avatar"
-              className="h-16 w-16 rounded-full hidden md:block "
+              alt='Avatar'
+              className='h-16 w-16 rounded-full hidden md:block '
             />
           </div>
           {/* REGISTER FORM */}
-          <form onSubmit={handleSubmit} className="flex flex-col md:px-0 px-5">
+          <form onSubmit={handleSubmit} className='flex flex-col md:px-0 px-5'>
             {/* username */}
             <label
-              className="text-white text-md font-light pl-4 mb-2"
-              htmlFor="username">
+              className='text-white text-md font-light pl-4 mb-2'
+              htmlFor='username'>
               Username
             </label>
             <input
-              title="Must be between 3-14 characters"
-              className="bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none "
-              placeholder="john doe"
-              type="text"
+              title='Must be between 3-14 characters'
+              className='bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none '
+              placeholder='john doe'
+              type='text'
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -213,30 +214,30 @@ const Register = () => {
 
             {/* email */}
             <label
-              className="text-white text-md font-light pl-4 mb-2"
-              htmlFor="email">
+              className='text-white text-md font-light pl-4 mb-2'
+              htmlFor='email'>
               Email
             </label>
             <input
-              title="Must be a valid email"
-              className="bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none "
-              placeholder="john.doe@gmail.com"
-              type="email"
+              title='Must be a valid email'
+              className='bg-[#2D2A46] text-white placeholder:opacity-50 rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none '
+              placeholder='john.doe@gmail.com'
+              type='email'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required></input>
 
             {/* password */}
             <label
-              className="text-white text-md  font-light pl-4 mb-2"
-              htmlFor="password">
+              className='text-white text-md  font-light pl-4 mb-2'
+              htmlFor='password'>
               Password
             </label>
             <input
-              title="Must have at least 6 characters"
-              className="bg-[#2D2A46] placeholder:opacity-50  text-white rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none"
-              placeholder="Must have at least 6 characters"
-              type="password"
+              title='Must have at least 6 characters'
+              className='bg-[#2D2A46] placeholder:opacity-50  text-white rounded-full px-4 py-1 2xl:py-2 mb-4 outline-none'
+              placeholder='Must have at least 6 characters'
+              type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -244,33 +245,33 @@ const Register = () => {
 
             {/* error */}
             <div
-              className="mb-2 ml-1  text-left text-red-500"
+              className='mb-2 ml-1  text-left text-red-500'
               ref={errorFeedback}></div>
             {/* Upload image */}
-            <label className="w-full mb-4 mt-3  transition duration-300 flex-col items-center px-4 py-2 bg-[#2D2A46] text-white rounded-full shadow-lg tracking-wide uppercase cursor-pointer hover:bg-primary-hover hover:text-white hidden md:flex">
-              <div className="flex justify-center items-center gap-5">
+            <label className='w-full mb-4 mt-3  transition duration-300 flex-col items-center px-4 py-2 bg-[#2D2A46] text-white rounded-full shadow-lg tracking-wide uppercase cursor-pointer hover:bg-primary-hover hover:text-white hidden md:flex'>
+              <div className='flex justify-center items-center gap-5'>
                 <svg
-                  className="w-7 h-7"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20">
-                  <path d="M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z" />
+                  className='w-7 h-7'
+                  fill='currentColor'
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox='0 0 20 20'>
+                  <path d='M16.88 9.1A4 4 0 0 1 16 17H5a5 5 0 0 1-1-9.9V7a3 3 0 0 1 4.52-2.59A4.98 4.98 0 0 1 17 8c0 .38-.04.74-.12 1.1zM11 11h3l-4-4-4 4h3v3h2v-3z' />
                 </svg>
-                <span className=" text-base leading-normal">
+                <span className=' text-base leading-normal'>
                   Upload profile image
                 </span>
               </div>
               <input
-                type="file"
-                className="hidden"
+                type='file'
+                className='hidden'
                 onChange={(e) => onImageChange(e.target.files[0])}
               />
             </label>
 
             {/* submit button */}
             <button
-              className="bg-primary-violet transition duration-300  hover:bg-primary-hover rounded-full text-white py-2 w-full mt-4 font-semibold tracking-widest flex justify-center items-center gap-2"
-              type="submit"
+              className='bg-primary-violet transition duration-300  hover:bg-primary-hover rounded-full text-white py-2 w-full mt-4 font-semibold tracking-widest flex justify-center items-center gap-2'
+              type='submit'
               onClick={handleSubmit}>
               REGISTER
               <FaUserPlus />
@@ -278,21 +279,21 @@ const Register = () => {
           </form>
 
           {/* LOGIN LINK */}
-          <div className="text-center mt-5">
-            <span className="text-white">Already a member? </span>
+          <div className='text-center mt-5'>
+            <span className='text-white'>Already a member? </span>
             <Link
-              className="pl-2 text-primary-hover transition duration-300 hover:text-primary-violet"
-              to="/login">
+              className='pl-2 text-primary-hover transition duration-300 hover:text-primary-violet'
+              to='/login'>
               {" "}
               Go to Login
             </Link>
           </div>
           {/* HOMEPAE LINK */}
-          <div className="text-center mt-1">
-            <span className="text-white ">Back to </span>
+          <div className='text-center mt-1'>
+            <span className='text-white '>Back to </span>
             <Link
-              className="pl-1 text-primary-hover transition duration-300 hover:text-primary-violet"
-              to="/">
+              className='pl-1 text-primary-hover transition duration-300 hover:text-primary-violet'
+              to='/'>
               Homepage
             </Link>
           </div>

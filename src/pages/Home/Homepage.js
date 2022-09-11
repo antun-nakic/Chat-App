@@ -58,12 +58,12 @@ const Homepage = () => {
   return (
     <motion.div
       exit={{ opacity: 0, x: "-100vw", transition: { duration: 0.7 } }}
-      className="overflow-hidden">
-      <header className="container flex justify-start items-center">
-        <h1 className="text-white pt-8 text-xl font-semibold ">ChatTam.</h1>
+      className='overflow-hidden'>
+      <header className='container flex justify-start items-center'>
+        <h1 className='text-white pt-8 text-xl font-semibold '>ChatTam.</h1>
       </header>
       {/* hero */}
-      <main className="mt-10 2xl:mt-24 lg:mt-7 justify-between container flex flex-col md:flex-row items-center">
+      <main className='mt-10 2xl:mt-24 lg:mt-7 justify-between container flex flex-col md:flex-row items-center'>
         {/* left side */}
         <motion.section
           initial={{ opacity: 0, x: -50 }}
@@ -73,14 +73,14 @@ const Homepage = () => {
             ease: "easeInOut",
             staggerChildren: 0.5,
           }}
-          className="w-full md:w-1/2 ">
-          <h1 className=" max-w-full lg:max-w-md 2xl:max-w-full text-3xl lg:text-4xl 2xl:text-[3rem] font-semibold text-center md:text-left text-white leading-[3rem] 2xl:leading-[4.5rem] lg:leading-[3.5rem] mb-5">
+          className='w-full md:w-1/2 '>
+          <h1 className=' max-w-full lg:max-w-md 2xl:max-w-full text-3xl lg:text-4xl 2xl:text-[3rem] font-semibold text-center md:text-left text-white leading-[3rem] 2xl:leading-[4.5rem] lg:leading-[3.5rem] mb-5'>
             The only chat app you will ever need...
           </h1>
-          <p className="text-center md:text-left font-extralight text-xl 2xl:text-3xl lg:text-xl text-white">
+          <p className='text-center md:text-left font-extralight text-xl 2xl:text-3xl lg:text-xl text-white'>
             Make an account and start chatting today!
           </p>
-          <div className="mt-10 2xl:max-w-xl lg:max-w-[22em]">
+          <div className='mt-10 2xl:max-w-xl lg:max-w-[22em]'>
             <motion.div
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -89,15 +89,15 @@ const Homepage = () => {
                 delay: 0.5,
                 ease: "easeInOut",
               }}
-              className="flex gap-7 2xl:mb-7 mb-5">
+              className='flex gap-7 2xl:mb-7 mb-5'>
               <Link
-                className="bg-primary-violet flex justify-center items-center gap-2 text-white text-center hover:bg-primary-hover py-2 w-full  rounded-xl transition duration-300"
-                to="../login">
+                className='bg-primary-violet flex justify-center items-center gap-2 text-white text-center hover:bg-primary-hover py-2 w-full  rounded-xl transition duration-300'
+                to='../login'>
                 Login <FaSignInAlt />
               </Link>
               <Link
-                className="bg-primary-violet flex justify-center items-center gap-2 text-white text-center hover:bg-primary-hover py-2 w-full rounded-xl transition duration-300 "
-                to="../register">
+                className='bg-primary-violet flex justify-center items-center gap-2 text-white text-center hover:bg-primary-hover py-2 w-full rounded-xl transition duration-300 '
+                to='../register'>
                 Register
                 <FaUserPlus />
               </Link>
@@ -110,8 +110,8 @@ const Homepage = () => {
                 delay: 0.5,
                 ease: "easeInOut",
               }}
-              className="bg-secondary-violet flex justify-center items-center font-medium tracking-wide uppercase gap-2 hover:bg-secondary-hover transition duration-300  rounded-xl text-white py-2 w-full"
-              type="submit"
+              className='bg-secondary-violet flex justify-center items-center font-medium tracking-wide uppercase gap-2 hover:bg-secondary-hover transition duration-300  rounded-xl text-white py-2 w-full'
+              type='submit'
               onClick={handleGuestLogin}>
               Login as guest
               <FaUserCircle />
@@ -126,11 +126,11 @@ const Homepage = () => {
             duration: 1,
             ease: "easeInOut",
           }}
-          className="mt-20 md:mt-0">
+          className='mt-20 md:mt-0'>
           <img
-            className="object-cover"
-            src="./assets/hero.png"
-            alt="chat screen"
+            className='object-cover'
+            src='./assets/hero.png'
+            alt='chat screen'
           />
         </motion.section>
       </main>

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { useId } from "react";
 
 export const userSlice = createSlice({
   name: "user",
@@ -8,8 +9,9 @@ export const userSlice = createSlice({
   },
   reducers: {
     login: (state, action) => {
+      const { photoUrl, displayName, uid, email } = action.payload;
       state.loading = false;
-      state.user = action.payload;
+      state.user = { photoUrl, displayName, uid, email };
     },
     logout: (state) => {
       state.user = null;
