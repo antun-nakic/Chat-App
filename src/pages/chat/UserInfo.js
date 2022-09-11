@@ -6,9 +6,6 @@ const UserInfo = ({ user, handleClickUser }) => {
     auth.signOut();
   };
 
-  console.log(user);
-  console.log("user in user info");
-
   return (
     <>
       <div

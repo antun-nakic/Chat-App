@@ -10,6 +10,7 @@ import {
 import { auth, db } from "../../firebase";
 // utility npm package
 import { toast } from "react-toastify";
+import { uuidv4 } from "@firebase/util";
 // components
 import RoomList from "./RoomList";
 
@@ -72,7 +73,7 @@ const Rooms = () => {
       {/* display all rooms */}
       <div className="flex flex-col gap-2 mt-5 ">
         {rooms.map((room) => (
-          <RoomList room={room} />
+          <RoomList key={uuidv4()} room={room} />
         ))}
       </div>
     </div>

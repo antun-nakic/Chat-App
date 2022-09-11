@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { query, collection, where, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import UserList from "./UserList";
+import { uuidv4 } from "@firebase/util";
 
 const UserSearchInput = ({ user, handleClickUser }) => {
   const [search, setSearch] = useState("");
@@ -59,7 +60,13 @@ const UserSearchInput = ({ user, handleClickUser }) => {
         </form>
       </div>
       {userList.map((user) => {
-        return <UserList user={user} handleClickUser={handleClickUser} />;
+        return (
+          <UserList
+            key={uuidv4()}
+            user={user}
+            handleClickUser={handleClickUser}
+          />
+        );
       })}
     </>
   );

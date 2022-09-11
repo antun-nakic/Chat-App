@@ -6,7 +6,6 @@ import { uuidv4 } from "@firebase/util";
 import Avatar from "react-avatar";
 
 const RoomList = ({ room }) => {
-  console.log(room);
   return (
     <li className="text-white   list-none" key={uuidv4()}>
       <Link
