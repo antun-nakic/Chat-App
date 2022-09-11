@@ -1,6 +1,7 @@
 import { auth } from "./../firebase";
 import Avatar from "react-avatar";
 
+// message styles
 const style = {
   message: ` flex items-center shadow-xl my-5 mx-3 py-2 relative px-4 rounded-tl-full rounded-tr-full `,
   sent: `bg-primary-violet text-white rounded-tr-full float-right rounded-bl-full  rounded-br-none`,
@@ -8,6 +9,7 @@ const style = {
   name: `absolute  mt-[-4rem] mb-3 mx-2  text-white text-xs`,
 };
 
+// message styling depending on who sent the message
 const Message = ({ message, image }) => {
   const messageClass =
     message.uid === auth.currentUser.uid
@@ -19,7 +21,7 @@ const Message = ({ message, image }) => {
       ? ` ${style.name} right-0`
       : `${style.name} left-0`;
 
-  const userImageMap = image.map((image) => {
+  const userImages = image.map((image) => {
     if (image.uid === message.uid && image !== undefined) {
       return image.image;
     } else {
@@ -27,13 +29,13 @@ const Message = ({ message, image }) => {
     }
   });
 
-  const filteredArrayOfImages = userImageMap.filter((image) => image !== null);
+  const singleUserImage = userImages.filter((image) => image !== null);
 
   return (
     <div>
       <div>
         <Avatar
-          src={filteredArrayOfImages.toString()}
+          src={singleUserImage.toString()}
           className={` ${
             message.uid === auth.currentUser.uid
               ? "float-right  mt-2.5 "
@@ -48,7 +50,7 @@ const Message = ({ message, image }) => {
       </div>
       <div className={`${style.message} ${messageClass}`}>
         <p className={` ${nameClass}`}>{message.name}</p>
-        <p>{message.text}</p>
+        <p>{message.message}</p>
       </div>
     </div>
   );

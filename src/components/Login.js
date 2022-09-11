@@ -34,19 +34,10 @@ function Login() {
       return;
     }
     const idToast = toast.loading("Logging in...");
-    signInWithEmailAndPassword(auth, email, password)
+    signInWithEmailAndPassword(auth, email, password);
+    toast
+      .dismiss(idToast)
       .then((userAuth) => {
-        // if (toast) {
-        //   toast.update(idToast, {
-        //     render: "You are now logged in.",
-        //     type: "success",
-        //     isLoading: false,
-        //     autoClose: 2000,
-        //     closeOnClick: true,
-        //     draggable: true,
-        //   });
-        // }
-
         dispatch(
           login({
             email: userAuth.user.email,
@@ -83,7 +74,7 @@ function Login() {
       duration={0.2}
       ease="easeInOut"
       className="min-h-screen flex flex-col justify-center items-center overflow-hidden">
-      {/* LOGIN FORM */}
+      {/* LOGIN MODAL*/}
       <motion.div
         initial={{
           opacity: 0,
@@ -148,6 +139,7 @@ function Login() {
               register here
             </Link>
           </div>
+          {/* HOMEPAEG LINK */}
           <div className="text-center mt-1">
             <span className="text-white ">Back to </span>
             <Link

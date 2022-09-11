@@ -1,3 +1,5 @@
+import { useState, useEffect, useRef } from "react";
+//firebase
 import {
   query,
   collection,
@@ -7,16 +9,16 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { db, auth } from "../../firebase";
-import { useState, useEffect, useRef } from "react";
-import Message from "../../components/Message";
-import SendMessage from "../../components/SendMessage";
-import Avatar from "react-avatar";
-import { RiSettings5Fill } from "react-icons/ri";
+// redux and react-router-dom
 import { selectUser } from "../../store/features/userSlice";
 import { useSelector } from "react-redux";
-import Rooms from "../../components/Rooms";
 import DynamicPage from "../../routes/DynamicPage";
-import { motion } from "framer-motion";
+// components
+import Rooms from "../../components/Rooms";
+import Modal from "../../components/Modal";
+// util npm package
+import Avatar from "react-avatar";
+import { AnimatePresence } from "framer-motion";
 
 const Homepage = () => {
   const [image, setImage] = useState([""]);
@@ -25,9 +27,9 @@ const Homepage = () => {
   const { user } = useSelector(selectUser);
   const [userList, setUserList] = useState([]);
   const [search, setSearch] = useState("");
-  // new stuff
-  const [isOpen, setIsOpen] = useState(false);
-  console.log(isOpen);
+  const [openModal, setOpenModal] = useState(false);
+  const [singleUserInfo, setSingleUserInfo] = useState([""]);
+
   // get all users from firestore database
   const getAllUsers = async () => {
     const querySnapshot = await getDocs(collection(db, "userInfo"));
@@ -42,7 +44,6 @@ const Homepage = () => {
   useEffect(() => {
     getAllUsers();
   }, [user]);
-
   const handleSearchUsers = async (e) => {
     e.preventDefault();
     const q = query(
@@ -50,7 +51,6 @@ const Homepage = () => {
       where("name", ">=", search),
       where("name", "<=", search + "\uf8ff")
     );
-
     try {
       const querySnapshot = await getDocs(q);
       const users = querySnapshot.docs.map((doc) => doc.data());
@@ -93,26 +93,25 @@ const Homepage = () => {
     return () => unsubscribe();
   }, []);
 
-  const handleSelectUser = async () => {};
+  const handleClickUser = (user) => {
+    setSingleUserInfo(user);
+    setOpenModal(true);
+  };
 
   return (
     <>
-      <motion.div
-        initial={{
-          opacity: 0,
-        }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.5 }}
-        duration={0.2}
-        ease="easeInOut"
-        className="flex min-h-screen ">
+      <div className="flex min-h-screen ">
+        <AnimatePresence>
+          {openModal && (
+            <Modal user={singleUserInfo} setOpenModal={setOpenModal} />
+          )}
+        </AnimatePresence>
         <section className=" w-1/2">
           {/* profile info */}
           <div className="text-white bg-gradient-to-r from-[#1c2232] to-[#18182a] flex justify-center border-opacity-30 items-center p-6 gap-7 border-b border-r  border-white ">
             <div className="relative ">
               <Avatar
-                // src={user.photoUrl ? user.photoUrl : ""}
+                src={user.photoUrl ? user.photoUrl : ""}
                 size={40}
                 round="50%"
                 maxInitials={2}
@@ -122,7 +121,7 @@ const Homepage = () => {
               <div className="bg-green-500 w-3 h-3 rounded-full absolute top-0 -right-0.5"></div>
             </div>
             <div>
-              <p className="font-semibold">{user.displayName}</p>
+              <p className="font-semibold ">{user.displayName}</p>
               <p className="font-light">#{user.uid.replace(/[^0-9]/g, "")}</p>
             </div>
 
@@ -138,9 +137,7 @@ const Homepage = () => {
               <Rooms />
             </div>
             {/* user list */}
-            <div
-              className="h-[calc(100vh-6.1rem)] 
-            bg-gradient-to-b from-[#121021] to-[#1c1a31] border-x border-white border-opacity-30  w-full overflow-y-auto">
+            <div className="min-h-[calc(100vh-6.1rem)] max-h-[calc(100vh-6.1rem)] bg-gradient-to-b from-[#121021] to-[#1c1a31] border-x border-white border-opacity-30  w-full overflow-auto">
               <div className="mb-5  ">
                 <form onSubmit={handleSearchUsers} className="flex  w-full">
                   <input
@@ -161,10 +158,10 @@ const Homepage = () => {
               {userList.map((user) => {
                 return (
                   <div
-                    onClick={handleSelectUser}
+                    onClick={() => handleClickUser(user)}
                     key={user.uid}
                     id={user.uid}
-                    className="flex text-white items-center space-x-3 mb-2 hover:bg-primary-violet cursor-pointer p-2  transition duration-200 ">
+                    className="flex text-white items-center space-x-3 mb-2 hover:bg-primary-violet cursor-pointer p-2  transition duration-200 overflox-y-auto">
                     <Avatar
                       src={user.image}
                       name={user.name}
@@ -192,7 +189,7 @@ const Homepage = () => {
         <section className="bg-hero-pattern bg-cover w-full min-h-screen ">
           <DynamicPage messages={messages} scroll={scroll} image={image} />
         </section>
-      </motion.div>
+      </div>
     </>
   );
 };

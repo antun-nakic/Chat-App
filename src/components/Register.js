@@ -23,6 +23,7 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const errorFeedback = useRef(null);
+
   // user info
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -55,15 +56,13 @@ const Register = () => {
       uid,
       image: url,
       isOnline: true,
+      memberSince: new Date().toLocaleString(),
     });
   };
-
-  // upload image & get url
   const metadata = { contentType: "image/jpeg " };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (name === "" || password === "" || email === "") {
       // set timeout to the message
       errorFeedback.current.innerHTML = "Please fill in all the fields";
@@ -76,18 +75,20 @@ const Register = () => {
       return;
     }
 
-    if (name.length < 3 || name.length > 14) {
+    // check username length
+    if (name.length < 3 || name.length > 20) {
       errorFeedback.current.innerHTML =
-        "Username must be between 3 and 14 characters";
+        "Username must be between 3 and 20 characters";
       errorFeedback.current.style.display = "block";
       setTimeout(() => {
         errorFeedback.current.style.display = "none";
       }, 5000);
-      toast.warn("Username must be between 3 and 14 characters");
+      toast.warn("Username must be between 3 and 20 characters");
       return;
     }
 
     const idToast = toast.loading("Creating user...");
+    // if image exists, upload image to firebase storage and pass the URL to handleRegister function, else pass empty string
     if (image) {
       const storageRef = ref(storage, `userimages/${uuidv4()}`);
       const uploadTask = uploadBytesResumable(storageRef, image, metadata);
@@ -108,7 +109,7 @@ const Register = () => {
     }
   };
 
-  // add user to db
+  // create user in firebase auth and add information to redux user slice
   const handleRegister = (idToast, url) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((userAuth) => {
@@ -194,7 +195,7 @@ const Register = () => {
           </div>
           {/* REGISTER FORM */}
           <form onSubmit={handleSubmit} className="flex flex-col">
-            {/* name */}
+            {/* username */}
             <label
               className="text-white text-md font-light pl-4 mb-2"
               htmlFor="username">
@@ -286,6 +287,7 @@ const Register = () => {
               Go to Login
             </Link>
           </div>
+          {/* HOMEPAE LINK */}
           <div className="text-center mt-1">
             <span className="text-white ">Back to </span>
             <Link

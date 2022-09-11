@@ -2,22 +2,23 @@ import { useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "./../firebase";
 import { MdSend } from "react-icons/md";
+import { toast } from "react-toastify";
 
-const SendMessage = ({ scroll }) => {
+const SendMessage = ({ scroll, roomId }) => {
   const [input, setInput] = useState("");
 
   const sendMessage = async (e) => {
     e.preventDefault();
     if (input === "") {
-      alert("Please enter a message");
+      toast.warn("Please enter a message");
       return;
     }
     const { uid, displayName } = auth.currentUser;
-    await addDoc(collection(db, "messages"), {
-      text: input,
+    await addDoc(collection(db, "rooms", roomId, "messages"), {
       name: displayName,
-      uid,
+      message: input,
       timestamp: serverTimestamp(),
+      uid: uid,
     });
     setInput("");
     scroll.current.scrollIntoView({ behavior: "smooth" });

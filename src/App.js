@@ -1,25 +1,26 @@
 import React, { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+//firebase
 import { auth, onAuthStateChanged } from "./firebase";
-import { login, logout, selectUser } from "./store/features/userSlice";
+// react-router-dom
+import { Routes, Route, useLocation } from "react-router-dom";
 import ProtectedRoutes from "./routes/ProtectedRoutes";
-
+// redux
+import { login, logout, selectUser } from "./store/features/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+// components
 import Chat from "./pages/chat/Chat";
 import Home from "./pages/Home/Home";
-
 import Login from "./components/Login";
 import Register from "./components/Register";
+// utility npm
+import { AnimatePresence } from "framer-motion";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Rooms from "./components/Rooms";
-import DynamicPage from "./routes/DynamicPage";
-
-import { AnimatePresence } from "framer-motion";
 
 function App() {
   const dispatch = useDispatch();
   const location = useLocation();
+
   // console log user
   const { loading, user } = useSelector(selectUser);
   if (!loading) {
@@ -50,9 +51,9 @@ function App() {
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<Home />} />
           <Route path="/" element={<ProtectedRoutes />}>
+            <Route path="/chat/:id" element={<Chat />} />
+            <Route path="/chat/public-room" element={<Chat />} />
             <Route path="/chat" element={<Chat />} />
-
-            <Route path="/chat/:id" element={<DynamicPage />} />
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

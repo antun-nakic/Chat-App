@@ -27,6 +27,7 @@ const Home = () => {
     signInAnonymously(auth)
       .then((userAuth) => {
         setUserRegistered(true);
+        toast.dismiss(idToast);
         // toast.update(idToast, {
         //   render:
         //     "You are now logged in as guest. Please create an account to use all app features.",
