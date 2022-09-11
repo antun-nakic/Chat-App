@@ -1,71 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 //firebase
-import {
-  query,
-  collection,
-  orderBy,
-  onSnapshot,
-  where,
-  getDocs,
-} from "firebase/firestore";
-import { db, auth } from "../../firebase";
+import { query, collection, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from "../../firebase";
 // redux and react-router-dom
 import { selectUser } from "../../store/features/userSlice";
 import { useSelector } from "react-redux";
-import DynamicPage from "../../routes/DynamicPage";
+import DynamicChatPage from "../../routes/DynamicChatPage";
 // components
-import Rooms from "../../components/Rooms";
+import Rooms from "./Rooms";
 import Modal from "../../components/Modal";
+import UserInfo from "./UserInfo";
+import UserSidebar from "./UserSidebar";
 // util npm package
-import Avatar from "react-avatar";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Sling as Hamburger } from "hamburger-react";
 
 const Homepage = () => {
+  const { user } = useSelector(selectUser);
   const [image, setImage] = useState([""]);
   const [messages, setMessages] = useState([]);
-  const scroll = useRef(null);
-  const { user } = useSelector(selectUser);
-  const [userList, setUserList] = useState([]);
-  const [search, setSearch] = useState("");
-  const [openModal, setOpenModal] = useState(false);
   const [singleUserInfo, setSingleUserInfo] = useState([""]);
-
-  // get all users from firestore database
-  const getAllUsers = async () => {
-    const querySnapshot = await getDocs(collection(db, "userInfo"));
-    const users = querySnapshot.docs.map((doc) => doc.data());
-    setUserList(users);
-  };
-
-  const logoutOfApp = () => {
-    auth.signOut();
-  };
-
-  useEffect(() => {
-    getAllUsers();
-  }, [user]);
-  const handleSearchUsers = async (e) => {
-    e.preventDefault();
-    const q = query(
-      collection(db, "userInfo"),
-      where("name", ">=", search),
-      where("name", "<=", search + "\uf8ff")
-    );
-    try {
-      const querySnapshot = await getDocs(q);
-      const users = querySnapshot.docs.map((doc) => doc.data());
-      if (users.length > 0) {
-        setUserList(users);
-      } else {
-        getAllUsers();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    if (search === "") {
-      getAllUsers();
-    }
-  };
+  const [openModal, setOpenModal] = useState(false);
+  const [toggleMobileMenu, setToggleMobileMenu] = useState(false);
 
   // get all messages from DB
   useEffect(() => {
@@ -101,35 +57,63 @@ const Homepage = () => {
   return (
     <>
       <div className="flex min-h-screen ">
+        {/* MOBILE SIDEBAR */}
+        <section className="md:hidden block ">
+          <div className=" absolute top-3 left-5 z-50">
+            <Hamburger
+              color="#fff"
+              toggled={toggleMobileMenu}
+              toggle={() => setToggleMobileMenu((prev) => !prev)}
+            />
+          </div>
+          <motion.div
+            initial={{ x: "-100%", opacity: 0 }}
+            animate={{
+              x: toggleMobileMenu ? "0" : "-100%",
+              opacity: toggleMobileMenu ? 1 : 0,
+            }}
+            exit={{
+              x: "-100%",
+              opacity: 0,
+            }}
+            transition={{ duration: 0.5 }}
+            ease="easeInOut"
+            className={` absolute z-40 w-full  left-0 top-0 ${
+              toggleMobileMenu ? "block" : "hidden "
+            } `}>
+            {toggleMobileMenu && (
+              <>
+                <div className="bg-secondary-violet text-white text-center pl-20 pr-10 pt-3  pb-5">
+                  <div className="flex gap-3 items-center  justify-start  ">
+                    <UserInfo user={user} />
+                  </div>
+                </div>
+                <div className="w-full bg-gradient-to-b from-[#1c2232] to-[#18182a] flex ">
+                  <div className="w-1/2">
+                    <Rooms />
+                  </div>
+                  <div className="min-h-[calc(100vh-6.1rem)] max-h-[calc(100vh-6.1rem)] bg-gradient-to-b from-[#121021] to-[#1c1a31] border-x border-white border-opacity-30  w-full overflow-auto">
+                    <UserSidebar
+                      user={user}
+                      handleClickUser={handleClickUser}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+          </motion.div>
+        </section>
+        {/* END MOBILE SIDEBAR */}
         <AnimatePresence>
           {openModal && (
             <Modal user={singleUserInfo} setOpenModal={setOpenModal} />
           )}
         </AnimatePresence>
-        <section className=" w-1/2">
+        {/* DESKTOP SIDEBAR */}
+        <section className="hidden md:block w-1/2">
           {/* profile info */}
           <div className="text-white bg-gradient-to-r from-[#1c2232] to-[#18182a] flex justify-center border-opacity-30 items-center p-6 gap-7 border-b border-r  border-white ">
-            <div className="relative ">
-              <Avatar
-                src={user.photoUrl ? user.photoUrl : ""}
-                size={40}
-                round="50%"
-                maxInitials={2}
-                name={user.displayName}
-                textSizeRatio={1.5}
-              />
-              <div className="bg-green-500 w-3 h-3 rounded-full absolute top-0 -right-0.5"></div>
-            </div>
-            <div>
-              <p className="font-semibold ">{user.displayName}</p>
-              <p className="font-light">#{user.uid.replace(/[^0-9]/g, "")}</p>
-            </div>
-
-            <button
-              className="ml-auto bg-primary-violet py-2 px-6 items-center justify-center hover:bg-primary-hover rounded-xl"
-              onClick={logoutOfApp}>
-              Logout
-            </button>
+            <UserInfo user={user} handleClickUser={handleClickUser} />
           </div>
           <div className="flex ">
             {/* chat room*/}
@@ -138,56 +122,13 @@ const Homepage = () => {
             </div>
             {/* user list */}
             <div className="min-h-[calc(100vh-6.1rem)] max-h-[calc(100vh-6.1rem)] bg-gradient-to-b from-[#121021] to-[#1c1a31] border-x border-white border-opacity-30  w-full overflow-auto">
-              <div className="mb-5  ">
-                <form onSubmit={handleSearchUsers} className="flex  w-full">
-                  <input
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="bg-transparent border-b border-white border-opacity-30 p-3 text-white w-full focus:outline-none"
-                    type="text"
-                    placeholder="search user"
-                  />
-                  <button
-                    onClick={handleSearchUsers}
-                    type="submit"
-                    className="w-32 bg-secondary-violet border-b border-white border-opacity-30 border-l text-white hover:bg-secondary-hover">
-                    Search
-                  </button>
-                </form>
-              </div>
-
-              {userList.map((user) => {
-                return (
-                  <div
-                    onClick={() => handleClickUser(user)}
-                    key={user.uid}
-                    id={user.uid}
-                    className="flex text-white items-center space-x-3 mb-2 hover:bg-primary-violet cursor-pointer p-2  transition duration-200 overflox-y-auto">
-                    <Avatar
-                      src={user.image}
-                      name={user.name}
-                      size="45"
-                      round={true}
-                    />
-                    <p className="whitespace-nowrap  break-words text-ellipsis overflow-x-hidden ">
-                      {user.name}
-                    </p>
-
-                    {user ? (
-                      <div className="bg-green-500 h-3 w-3 rounded-full"></div>
-                    ) : (
-                      <div className="bg-red-500 h-3 w-3 rounded-full"></div>
-                    )}
-                  </div>
-                );
-              })}
+              <UserSidebar user={user} handleClickUser={handleClickUser} />
             </div>
-
-            {/*  end user ist */}
           </div>
         </section>
         {/* chat */}
         <section className="bg-hero-pattern bg-cover w-full min-h-screen ">
-          <DynamicPage messages={messages} scroll={scroll} image={image} />
+          <DynamicChatPage messages={messages} image={image} />
         </section>
       </div>
     </>

@@ -9,9 +9,9 @@ import { login, logout, selectUser } from "./store/features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 // components
 import Chat from "./pages/chat/Chat";
-import Home from "./pages/Home/Home";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Homepage from "./pages/Home/Homepage";
+import Login from "./pages/Home/Login";
+import Register from "./pages/Home/Register";
 // utility npm
 import { AnimatePresence } from "framer-motion";
 import { ToastContainer } from "react-toastify";
@@ -49,7 +49,7 @@ function App() {
     <div className="bg-hero-pattern bg-cover min-h-screen">
       <AnimatePresence exitBeforeEnter>
         <Routes location={location} key={location.pathname}>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Homepage />} />
           <Route path="/" element={<ProtectedRoutes />}>
             <Route path="/chat/:id" element={<Chat />} />
             <Route path="/chat/public-room" element={<Chat />} />

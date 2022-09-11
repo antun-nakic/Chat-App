@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 //firebase
 import { db } from "../firebase";
 import { query, collection, orderBy, onSnapshot } from "firebase/firestore";
@@ -8,7 +8,8 @@ import { useParams } from "react-router-dom";
 import Message from "../components/Message";
 import SendMessage from "../components/SendMessage";
 
-function DynamicPage({ scroll }) {
+function DynamicPage() {
+  const scroll = useRef(null);
   const { id } = useParams();
   const [image, setImage] = useState([""]);
   const [messages, setMessages] = useState([]);
@@ -52,7 +53,7 @@ function DynamicPage({ scroll }) {
     <div className="h-screen bg-hero-pattern bg-cover bg-no-repeat bg-center  overflow-auto flex flex-col">
       <div className="z-10 flex mb-20 overflow-ellipsis flex-col  relative">
         <div className="w-full p-10 bg-gradient-to-r from-[#111826] to-[#1e1232] bg-opacity-70">
-          <h2 className="text-[#4E7AA8] uppercase font-semibold text-4xl">
+          <h2 className="text-[#4E7AA8] text-center md:text-left uppercase font-semibold text-4xl">
             {id ? id : "public-room"}
           </h2>
         </div>

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import { FaUserPlus, FaSignInAlt, FaUserCircle } from "react-icons/fa";
 import { motion } from "framer-motion";
 
-const Home = () => {
+const Homepage = () => {
   const [userRegistered, setUserRegistered] = useState(false);
   const { user } = useSelector(selectUser);
   const navigate = useNavigate();
@@ -138,4 +138,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Homepage;

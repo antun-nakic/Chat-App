@@ -6,13 +6,13 @@ import {
   updateProfile,
   storage,
   db,
-} from "../firebase";
+} from "../../firebase";
 import { collection, addDoc } from "firebase/firestore";
 // redux and react router
 import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 import { useNavigate, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { login, selectUser } from "../store/features/userSlice";
+import { login, selectUser } from "../../store/features/userSlice";
 // utility npm
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
@@ -118,14 +118,14 @@ const Register = () => {
           displayName: name,
           photoURL: url,
         }).then(
-          toast.update(idToast, {
-            render: "User created successfully",
-            type: "success",
-            isLoading: false,
-            autoClose: 2000,
-            closeOnClick: true,
-            draggable: true,
-          }),
+          // toast.update(idToast, {
+          //   render: "User created successfully",
+          //   type: "success",
+          //   isLoading: false,
+          //   autoClose: 2000,
+          //   closeOnClick: true,
+          //   draggable: true,
+          // }),
           dispatch(
             login({
               email: userAuth.user.email,
@@ -194,7 +194,7 @@ const Register = () => {
             />
           </div>
           {/* REGISTER FORM */}
-          <form onSubmit={handleSubmit} className="flex flex-col">
+          <form onSubmit={handleSubmit} className="flex flex-col md:px-0 px-5">
             {/* username */}
             <label
               className="text-white text-md font-light pl-4 mb-2"
